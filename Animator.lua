@@ -5,7 +5,7 @@ local TS = game:GetService("TweenService")
 local function PoseStyleToEasingStyle(poseEasing)
 	local get = string.gsub(tostring(poseEasing), "Enum.PoseEasingStyle.", "")
 	if get == "Constant" then
-		get = "InOut"
+		get = "Quart"
 	end
 	return Enum.EasingStyle[get]
 end
