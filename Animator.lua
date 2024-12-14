@@ -79,35 +79,16 @@ local function GetFramesConvertData(dataFrames, GetFrames)
 	end
 
 end
-local function SetToTable(model, motors, motorsOriginalOffset)
-
-	for _, BodyPart in pairs(model:GetChildren()) do
-		if BodyPart:IsA("BasePart") then
-			if BodyPart:GetJoints() ~= nil then
-				for _, Joint in pairs(BodyPart:GetJoints()) do
-					if Joint.Part1 == BodyPart and Joint:IsA("Motor6D") then
-						table.insert(motors, motors[BodyPart.Name])
-						motors[BodyPart.Name] = Joint
-						table.insert(motorsOriginalOffset, motorsOriginalOffset[BodyPart.Name])
-						motorsOriginalOffset[BodyPart.Name] = Joint.C1 * CFrame.new(0, 0, 0)
-
-
-					end
-
-
-
-				end
-
-
-
-
-			end
-
-
+local function SetToTable(model: Model, motors, motorsOriginalOffset)
+	for _, Joint in pairs(model:GetDescendants()) do
+		if Joint:IsA("Motor6D") then
+			local BodyPart = Joint.Part1
+			table.insert(motors, motors[BodyPart.Name])
+			motors[BodyPart.Name] = Joint
+			table.insert(motorsOriginalOffset, motorsOriginalOffset[BodyPart.Name])
+			motorsOriginalOffset[BodyPart.Name] = Joint.C1 * CFrame.new(0, 0, 0)
 		end
-
 	end
-
 end
 
 function module.GetBasicR15(rig)
@@ -238,7 +219,7 @@ end
 function startPlay(selfA, OutSpeed, dataFrames, motors, motorsOriginalOffset)
 	selfA.EventListener:Fire("AnimStatus", "Start")
 	local function AllCodeThatILazyToNameHelpMePlz(i)
-		
+
 		local Data = dataFrames[i]
 		local offsetTime = os.clock() / Data.KeyFrameTimeLengh % 1 * Data.KeyFrameTimeLengh
 
@@ -281,7 +262,7 @@ function startPlay(selfA, OutSpeed, dataFrames, motors, motorsOriginalOffset)
 			for i = #dataFrames, 1, -1 do
 				AllCodeThatILazyToNameHelpMePlz(i)
 			end
-			
+
 		else
 			for i = selfA.FrameIndex, 1, -1 do
 				AllCodeThatILazyToNameHelpMePlz(i)
@@ -310,10 +291,10 @@ function startPlay(selfA, OutSpeed, dataFrames, motors, motorsOriginalOffset)
 		selfA.Playing = false
 	end
 	selfA.EventListener:Fire("AnimStatus", "End")
-	
-	
-	
-	
+
+
+
+
 end
 
 
@@ -514,16 +495,12 @@ function module:Play(OutSpeed)
 			local eventConnection
 			eventConnection = self.EventListener.Event:Connect(function(animstat, en)
 				if self.Looped == true then
-
-
 					if animstat == "AnimStatus" and en == "End" then
 						self.EventListener:Fire("AnimStatus", "Loop")
 						self.Process = coroutine.create(function()
 							startPlay(self, OutSpeed, dataFrames, motors, motorsOriginalOffset)
 						end)
 						coroutine.resume(self.Process)
-
-
 					end
 				else
 					eventConnection:Disconnect()
@@ -532,16 +509,9 @@ function module:Play(OutSpeed)
 					self.EventListener:Fire("AnimStatus", "LoopClosed")
 				end
 			end)
-
-
 		end)
 		coroutine.resume(self.ProcessOfLoop)
-
 	end
-
-
-
-
 end
 
 return module
