@@ -81,7 +81,7 @@ local function GetFramesConvertData(dataFrames, GetFrames)
 end
 local function SetToTable(model: Model, motors, motorsOriginalOffset)
 	for _, Joint in pairs(model:GetDescendants()) do
-		if Joint:IsA("Motor6D") then
+		if Joint:IsA("Motor6D") and Joint.Part1 then
 			local BodyPart = Joint.Part1
 			table.insert(motors, motors[BodyPart.Name])
 			motors[BodyPart.Name] = Joint
