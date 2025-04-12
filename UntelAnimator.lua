@@ -65,6 +65,10 @@ function module.new(character)
             end
         end)
     end
+
+    function self:setSpeed(speed)
+        self.currentAnim:SetSpeed(speed)
+    end
     
     function self:stopKeyframe()
         if self.currentAnim then
