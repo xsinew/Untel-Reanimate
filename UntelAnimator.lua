@@ -10,14 +10,6 @@ local function GetJointData(Joint)
     end
 end
 
-function getC1(weld, targetCFrame)
-    local basePart = weld.Part1
-    if basePart and basePart:IsA("BasePart") then
-        return targetCFrame:ToObjectSpace(basePart.CFrame):Inverse()
-    end
-    return nil
-end
-
 local module = {}
 module.__index = module
 
@@ -78,7 +70,6 @@ function module.new(character)
         if self.currentAnim then
             self.character.Humanoid.HipHeight = 0
             self.currentAnim:Stop()
-            task.wait(0.3)
             for i=1, 10 do
                 self.currentAnim:ResetMotors()
             end
